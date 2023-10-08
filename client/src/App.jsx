@@ -1,21 +1,18 @@
-import { Button } from '@material-tailwind/react'
-import React from 'react'
-import toast, { Toaster } from 'react-hot-toast'
+import AboutPage from './pages/AboutPage';
+import Homepage from './pages/Homepage';
+import { BrowserRouter, Route, Routes, Outlet, Navigate } from 'react-router-dom'
+import Login from './pages/Login';
+
 
 const App = () => {
   return (
-    <>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
-      <div className="h-screen w-screen flex flex-col items-center justify-center">
-        <h1 className='my-2'>Hello, Let's Collab</h1>
-        <Button size='sm' color='blue' onClick={() => toast('Welcome!', {
-          icon: '👋',
-        })}>Get Started</Button>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element = {<Homepage/>} />
+        <Route path='/login' element = {<Login/>} />
+        <Route path='/about' element = {<AboutPage/>} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
