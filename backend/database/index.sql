@@ -14,6 +14,10 @@ CREATE TABLE Users (
     INDEX idx_user_email (email),
     INDEX idx_user_username (username)
 );
+-- Add Is verified Field
+ALTER TABLE `users`
+ADD `is_verified` TINYINT NOT NULL DEFAULT '0'
+AFTER `phone`;
 -- Projects Table
 CREATE TABLE Projects (
     project_id INT PRIMARY KEY AUTO_INCREMENT,
