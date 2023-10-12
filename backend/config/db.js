@@ -2,10 +2,14 @@
 const mysql = require('mysql');
 
 const db = mysql.createConnection({
-    host: 'https://macaronic-controls.000webhostapp.com/',
-    user: 'id21370235_ayush',
-    password: 'Pass@123',
-    database: 'id21370235_taskcollab'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
+
+
+
+
 
 module.exports = db;

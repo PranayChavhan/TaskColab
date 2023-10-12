@@ -6,7 +6,19 @@ const userModel = require("../models/userModel");
 const sendMail = require('../services/mailService');
 
 class AuthController {
-    // [POST] /api/auth/register
+
+    // [GET]  /auth/users
+    async getUsers(req, res) {
+        const users = await userModel.getUsers();
+
+        if (users) {
+            return res.status(200).json({ users });
+        }
+
+        return res.status(400).json({ msg: "No users found" });
+    }
+
+    // [POST] /auth/register
     async register(req, res) {
         const { firstname, lastname, username, email, password, profile_image_url } = req.body;
         console.log("req.body", req.body);

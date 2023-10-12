@@ -2,7 +2,6 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
-const db = require('./config/db');
 const dotenv = require('dotenv');
 const router = require('./routes');
 const app = express();
@@ -10,15 +9,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-dotenv.config();
+dotenv.config({ path: './.env' });
 
 //connect to mysql
 const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'taskcollab'
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
 });
+
+
+console.log(process.env.DB_HOST)
+console.log(process.env.DB_NAME)
+console.log(process.env.DB_PASS)
+console.log(process.env.DB_USER)
 
 //check connection
 con.connect((err) => {

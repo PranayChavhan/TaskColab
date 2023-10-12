@@ -15,7 +15,7 @@ CREATE TABLE Users (
     INDEX idx_user_username (username)
 );
 -- Add Is verified Field
-ALTER TABLE `users`
+ALTER TABLE `Users`
 ADD `is_verified` TINYINT NOT NULL DEFAULT '0'
 AFTER `phone`;
 -- Projects Table
