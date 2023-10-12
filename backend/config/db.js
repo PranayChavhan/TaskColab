@@ -5,7 +5,8 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'taskcollab'
+    database: 'taskcollab',
+    port: 3308,
 });
 
 module.exports = db;

@@ -12,16 +12,8 @@ app.use(express.json());
 
 dotenv.config();
 
-//connect to mysql
-const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'taskcollab'
-});
-
 //check connection
-con.connect((err) => {
+db.connect((err) => {
     if (err) {
         console.log(err);
     } else {
