@@ -2,15 +2,29 @@ const projectModel = require("../models/projectModel");
 
 function createProject(req, res) {
   const projectData = req.body;
+
   projectModel.createProject(projectData, (err, result) => {
     if (err) {
       console.error("Error creating project:", err);
       res.status(500).json({ error: "Error creating project" });
     } else {
-      res.status(201).json({ message: "Project created successfully" });
+      const projectId = result.insertId; // Get the project_id from the database response
+      const projectCreatorUserId = req.userId; // Assuming you have the user_id in the request
+
+      projectModel.linkUserToRole(projectCreatorUserId, 'project_head', projectId, (linkErr) => {
+        if (linkErr) {
+          console.error("Error linking user to project_head role:", linkErr);
+          // You might consider rolling back the project creation in case of a failure here
+          res.status(500).json({ error: "Error creating project" });
+        } else {
+          res.status(201).json({ message: "Project created successfully" });
+        }
+      })
     }
   });
 }
+
+
 
 function updateProject(req, res) {
   const projectId = req.params.project_id;

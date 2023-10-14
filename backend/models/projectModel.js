@@ -58,10 +58,26 @@ function getAllProjects(callback) {
   });
 }
 
+
+// Assign Roles
+function linkUserToRole(userId, roleName, projectId, callback) {
+  const sql = `
+    INSERT INTO user_roles (user_id, role_id, project_id)
+    SELECT ?, roles.role_id, ?
+    FROM roles
+    WHERE role_name = ?;
+  `;
+
+  const values = [userId, projectId, roleName];
+
+  db.query(sql, values, callback);
+}
+
 module.exports = {
   createProject,
   updateProject,
   getProjectById,
   deleteProject,
   getAllProjects,
+  linkUserToRole
 };
