@@ -8,13 +8,13 @@ function createProject(req, res) {
       console.error("Error creating project:", err);
       res.status(500).json({ error: "Error creating project" });
     } else {
-      const projectId = result.insertId; // Get the project_id from the database response
-      const projectCreatorUserId = req.userId; // Assuming you have the user_id in the request
+      const projectId = result.insertId; 
+      const projectCreatorUserId = result.project_head; 
 
       projectModel.linkUserToRole(projectCreatorUserId, 'project_head', projectId, (linkErr) => {
         if (linkErr) {
+
           console.error("Error linking user to project_head role:", linkErr);
-          // You might consider rolling back the project creation in case of a failure here
           res.status(500).json({ error: "Error creating project" });
         } else {
           res.status(201).json({ message: "Project created successfully" });

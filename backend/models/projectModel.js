@@ -68,7 +68,7 @@ function linkUserToRole(userId, roleName, projectId, callback) {
     WHERE role_name = ?;
   `;
 
-  const values = [userId, projectId, roleName];
+  const values = [userId, roleName, projectId ];
 
   db.query(sql, values, callback);
 }
