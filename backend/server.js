@@ -5,6 +5,9 @@ const cors = require('cors');
 const db = require('./config/db');
 const dotenv = require('dotenv');
 const router = require('./routes');
+const projectRoutes = require('./routes/projectRoutes');
+
+
 const app = express();
 
 app.use(cors());
@@ -25,8 +28,9 @@ app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Taskcollab!' });
 });
 
-//Auth Routes
 app.use(router);
+
+
 
 //run server
 const PORT = process.env.PORT || 8000;
