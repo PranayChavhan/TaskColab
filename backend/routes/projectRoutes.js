@@ -1,17 +1,21 @@
-const express = require('express');
-const projectController = require('../controllers/projectController');
+const express = require("express");
+const projectController = require("../controllers/projectController");
 
 const router = express.Router();
 
 // Create a new project
-router.post('/add-project', projectController.createProject);
+router.post("/add-project", projectController.createProject);
 
-// Retrieve a project by ID
-router.get('/:project_id', (req, res) => {
-    const projectId = req.params.project_id;
-    // You can add code to fetch the project from the database here if needed.
-  
-    res.status(200).json({ message: `Project with ID ${projectId} retrieved successfully` });
-  });
+// Update an existing project
+router.put("/update/:project_id", projectController.updateProject);
+
+// Get existing projects by id
+router.get("/show/:project_id", projectController.getProjectById);
+
+// Delete existing projects by id
+router.delete("/delete/:project_id", projectController.deleteProject);
+
+// Get all existing projects
+router.get("/getAll", projectController.getAllProjects);
 
 module.exports = router;
