@@ -15,15 +15,21 @@ app.use(express.json());
 
 dotenv.config();
 
-//check connection
-db.connect((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("DB Connected!")
-    }
-});
+//Development
+// //check connection
+// db.connect((err) => {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log("DB Connected!")
+//     }
+// });
 //Test Route
+
+//Production
+const con = mysql.createPool("mysql://admin:AyUsDUrveshPraN@database-1.cqmmqqerazz0.ap-south-1.rds.amazonaws.com/taskcollab");
+
+
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Taskcollab!' });
 });
