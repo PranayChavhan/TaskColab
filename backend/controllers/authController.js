@@ -6,7 +6,20 @@ const userModel = require("../models/userModel");
 const sendMail = require('../services/mailService');
 
 class AuthController {
-    // [POST] /api/auth/register
+
+    // [GET]  /auth/users
+    async getUsers(req, res) {
+        const users = await userModel.getUsers().then((users) => {
+            // console.log("Users: ", users);
+            return res.status(400).json({ users })
+        }).catch((err) => {
+            console.log("Error: ", err);
+            return res.status(500).json({ msg: err.message })
+        });
+        return res.status(200).json({ users });
+    }
+
+    // [POST] /auth/register
     async register(req, res) {
         const { firstname, lastname, username, email, password, profile_image_url } = req.body;
         console.log("req.body", req.body);
@@ -65,6 +78,41 @@ class AuthController {
         }
     }
 
+    // [POST] /api/auth/verifyotp
+    async verifyOTP(req, res) {
+        const otp = req.body.otp;
+        const email = req.body.email;
+
+        if (otp == null || email == null) {
+            return res.status(400).json({ msg: "Please fill in all fields" });
+        }
+
+        if (otp.length != 5) {
+            return res.status(400).json({ msg: "Invalid OTP" });
+        }
+
+        try {
+            //Check OTP
+            const user = await userModel.getUserByEmail(email);
+
+            if (!user) {
+                return res.status(400).json({ msg: "User does not exist" });
+            }
+
+
+            if (user.otp == otp) {
+                //Update OTP
+                await userModel.updateOTP(email, null);
+                return res.status(200).json({ msg: "OTP verified successfully!" });
+            }
+
+            return res.status(400).json({ msg: "Invalid OTP" });
+
+        } catch (err) {
+            return res.statue(500).json({ msg: err.message });
+        }
+    }
+
     // [POST] /api/auth/login
     async login(req, res) {
         const { email, password } = req.body;
@@ -93,6 +141,15 @@ class AuthController {
             return res.status(200).json({
                 token,
                 msg: "Logged in successfully",
+                user: {
+                    id: user.id,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    username: user.username,
+                    email: user.email,
+                    profile_image_url: user.profile_image_url,
+                    updated_at: user.updated_at,
+                }
             });
 
         } catch (err) {
@@ -140,7 +197,6 @@ class AuthController {
         }
     }
 
-
     // [POST] /api/auth/resetpassword
     async resetPassword(req, res) {
         const { email, otp, password } = req.body;
@@ -174,6 +230,8 @@ class AuthController {
         }
 
     }
+
+
 }
 
 

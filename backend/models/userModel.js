@@ -3,6 +3,19 @@ const db = require('../config/db');
 //Create User
 module.exports = {
 
+    //SQL Query to get all users
+    getUsers: () => {
+        return new Promise((resolve, reject) => {
+            db.query('SELECT * FROM users', (err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        })
+    },
+
     //SQL Query to create a new user
     createUser: (userData) => {
         const { firstname, lastname, username, email, password_hash, profile_image_url, otp, phone } = userData;
