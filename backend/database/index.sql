@@ -14,10 +14,14 @@ CREATE TABLE Users (
     INDEX idx_user_email (email),
     INDEX idx_user_username (username)
 );
+
+
 -- Add Is verified Field
 ALTER TABLE `Users`
 ADD `is_verified` TINYINT NOT NULL DEFAULT '0'
 AFTER `phone`;
+
+
 -- Projects Table
 CREATE TABLE Projects (
     project_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -29,6 +33,8 @@ CREATE TABLE Projects (
     -- Updated to match Users table
     INDEX idx_project_name (name)
 );
+
+
 -- Members Table
 CREATE TABLE Members (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -38,6 +44,8 @@ CREATE TABLE Members (
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES Projects(project_id) ON DELETE CASCADE
 );
+
+
 -- Task Table
 CREATE TABLE Task (
     task_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -50,6 +58,8 @@ CREATE TABLE Task (
     -- Updated column name to match Projects table
     FOREIGN KEY (project_id) REFERENCES Projects(project_id)
 );
+
+
 -- TaskComments Table
 CREATE TABLE TaskComment (
     comment_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,6 +68,8 @@ CREATE TABLE TaskComment (
     comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (task_id) REFERENCES Task(task_id) -- Updated table name to match Task table
 );
+
+
 -- TaskAttachments Table
 CREATE TABLE TaskAttachments (
     attachment_id INT PRIMARY KEY AUTO_INCREMENT,
@@ -65,3 +77,22 @@ CREATE TABLE TaskAttachments (
     file_path VARCHAR(255),
     FOREIGN KEY (task_id) REFERENCES Task(task_id) -- Updated table name to match Task table
 );
+
+
+-- Role Table
+CREATE TABLE roles (
+  role_id INT AUTO_INCREMENT PRIMARY KEY,
+  role_name VARCHAR(255) NOT NULL
+);
+
+INSERT INTO roles (role_name) VALUES ('project_head'), ('member');
+
+
+-- Assigned Roles Table
+CREATE TABLE user_roles (
+  user_id INT,
+  role_id INT,
+  FOREIGN KEY (user_id) REFERENCES users(user_id),
+  FOREIGN KEY (role_id) REFERENCES roles(role_id)
+);
+
