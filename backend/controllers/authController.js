@@ -9,13 +9,14 @@ class AuthController {
 
     // [GET]  /auth/users
     async getUsers(req, res) {
-        const users = await userModel.getUsers();
-
-        if (users) {
-            return res.status(200).json({ users });
-        }
-
-        return res.status(400).json({ msg: "No users found" });
+        const users = await userModel.getUsers().then((users) => {
+            // console.log("Users: ", users);
+            return res.status(400).json({ users })
+        }).catch((err) => {
+            console.log("Error: ", err);
+            return res.status(500).json({ msg: err.message })
+        });
+        return res.status(200).json({ users });
     }
 
     // [POST] /auth/register

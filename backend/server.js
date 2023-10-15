@@ -12,12 +12,7 @@ app.use(express.json());
 dotenv.config({ path: './.env' });
 
 //connect to mysql
-const con = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-});
+const con = mysql.createPool("mysql://admin:AyUsDUrveshPraN@database-1.cqmmqqerazz0.ap-south-1.rds.amazonaws.com/taskcollab");
 
 
 console.log(process.env.DB_HOST)
@@ -25,14 +20,7 @@ console.log(process.env.DB_NAME)
 console.log(process.env.DB_PASS)
 console.log(process.env.DB_USER)
 
-//check connection
-con.connect((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        console.log("DB Connected!")
-    }
-});
+
 //Test Route
 app.get('/', (req, res) => {
     res.json({ message: 'Welcome to Taskcollab!' });
