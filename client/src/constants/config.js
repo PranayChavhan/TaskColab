@@ -24,6 +24,9 @@ export const API_NOTIFICATION_MESSAGES = {
 
 
 export const SERVICE_URLS = {
-    userSignup : {url : '/signup', method : 'POST'},
-    loginUser : {url : '/login', method : 'POST'}
+    userSignup : {url : '/auth/register', method : 'POST'},
+    userLogin : {url : '/auth/login', method : 'POST'},
+    verifyOtp : {url : '/auth/verifyotp', method : 'POST'},
+    forgotPass : {url : '/auth/forgotPassword', method : 'POST'},
+    resetPassword : {url : '/auth/resetpassword', method : 'POST'}
 }

@@ -70,9 +70,7 @@ class AuthController {
                 <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`
             await sendMail(to, subject, html);
 
-
             return res.status(200).json({ msg: 'User created successfully' });
-
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -214,7 +212,7 @@ class AuthController {
 
             console.log(user.otp);
             console.log(otp);
-            if (user.otp !== otp) {
+            if (user.otp != otp) {
                 return res.status(400).json({ msg: "Invalid OTP" })
             }
 
