@@ -70,9 +70,7 @@ class AuthController {
                 <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`
             await sendMail(to, subject, html);
 
-
             return res.status(200).json({ msg: 'User created successfully' });
-
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -136,13 +134,15 @@ class AuthController {
             }
             //Gnenerate access token
 
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+            console.log("USER ID")
+
+            const token = jwt.sign({ userId: user.user_id,fname:user.firstname }, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 token,
                 msg: "Logged in successfully",
                 user: {
-                    id: user.id,
+                    id: user.user_id,
                     firstname: user.firstname,
                     lastname: user.lastname,
                     username: user.username,
@@ -214,7 +214,7 @@ class AuthController {
 
             console.log(user.otp);
             console.log(otp);
-            if (user.otp !== otp) {
+            if (user.otp != otp) {
                 return res.status(400).json({ msg: "Invalid OTP" })
             }
 

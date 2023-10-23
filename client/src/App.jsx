@@ -1,20 +1,14 @@
-import AboutPage from './pages/AboutPage';
-import Homepage from './pages/Homepage';
-import { BrowserRouter, Route, Routes} from 'react-router-dom'
-import Login from './pages/Login';
-import "./App.css"
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Dashboard, Auth } from "@/layouts";
 
-
-const App = () => {
+function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element = {<Homepage/>} />
-        <Route path='/login' element = {<Login/>} />
-        <Route path='/about' element = {<AboutPage/>} />
-      </Routes>
-    </BrowserRouter>
-  )
+    <Routes>
+      <Route path="/dashboard/*" element={<Dashboard />} />
+      <Route path="/auth/*" element={<Auth />} />
+      <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
