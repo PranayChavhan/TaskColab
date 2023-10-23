@@ -134,13 +134,15 @@ class AuthController {
             }
             //Gnenerate access token
 
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+            console.log("USER ID")
+
+            const token = jwt.sign({ userId: user.user_id,fname:user.firstname }, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 token,
                 msg: "Logged in successfully",
                 user: {
-                    id: user.id,
+                    id: user.user_id,
                     firstname: user.firstname,
                     lastname: user.lastname,
                     username: user.username,

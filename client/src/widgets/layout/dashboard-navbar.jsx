@@ -28,11 +28,14 @@ import {
   setOpenSidenav,
 } from "@/context";
 
-export function DashboardNavbar() {
+export function DashboardNavbar({handleNewProject}) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
   const [layout, page] = pathname.split("/").filter((el) => el !== "");
+
+
+
 
   return (
     <Navbar
@@ -74,7 +77,7 @@ export function DashboardNavbar() {
           </Typography>
         </div>
         <div className="flex items-center">
-        <Button color="blue" className="mr-4 flex items-center justify-center mb-0 text-white">New Project <PlusSmallIcon className="h-5 w-5"/></Button>
+        <Button onClick={handleNewProject} color="blue" className="mr-4 flex items-center justify-center mb-0 text-white">New Project <PlusSmallIcon className="h-5 w-5"/></Button>
 
           <div className="mr-auto md:mr-4 md:w-56">
             <Input label="Type here" />

@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
+import {useState} from 'react'
 import { Cog6ToothIcon } from "@heroicons/react/24/solid";
-import { IconButton } from "@material-tailwind/react";
+import { IconButton, Button} from "@material-tailwind/react";
 import {
   Sidenav,
   DashboardNavbar,
@@ -9,8 +10,21 @@ import {
 } from "@/widgets/layout";
 import routes from "@/routes";
 import { useMaterialTailwindController, setOpenConfigurator } from "@/context";
+import { AddProjectDialog } from "@/widgets/dialogs/AddProjectDialog";
+
+
+
 
 export function Dashboard() {
+
+  const [open, setOpen] = useState(false);
+ 
+
+  const handleNewProjectDialog = ()=>{
+    setOpen(!open);
+  }
+
+  <Button >Message Dialog</Button>
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavType } = controller;
 
@@ -23,7 +37,7 @@ export function Dashboard() {
         }
       />
       <div className="p-4 xl:ml-80">
-        <DashboardNavbar />
+        <DashboardNavbar handleNewProject={handleNewProjectDialog}/>
         <Configurator />
         <IconButton
           size="lg"
@@ -34,6 +48,7 @@ export function Dashboard() {
         >
           <Cog6ToothIcon className="h-5 w-5" />
         </IconButton>
+        <AddProjectDialog open={open} handleOpen={handleNewProjectDialog}/>
         <Routes>
           {routes.map(
             ({ layout, pages }) =>
