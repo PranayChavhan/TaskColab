@@ -5,9 +5,12 @@ import {
   BellIcon,
   ArrowRightOnRectangleIcon,
   UserPlusIcon,
+  FolderIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications } from "@/pages/dashboard";
+import { Home, Profile, Tables, Notifications,Projects } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
+import { ListBulletIcon } from "@heroicons/react/24/outline";
+import Tasks from "./pages/dashboard/tasks";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -23,6 +26,18 @@ export const routes = [
         path: "/home",
         element: <Home />,
       },
+      {
+        icon: <FolderIcon {...icon} />,
+        name: "projects",
+        path: "/projects",
+        element: <Projects />,
+      },
+      {
+        icon: <ListBulletIcon {...icon} />,
+        name: "tasks",
+        path: "/tasks",
+        element: <Tasks />,
+      } ,
       {
         icon: <UserCircleIcon {...icon} />,
         name: "profile",

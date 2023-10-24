@@ -24,9 +24,11 @@ export const API_NOTIFICATION_MESSAGES = {
 
 
 export const SERVICE_URLS = {
-    userSignup : {url : '/auth/register', method : 'POST'},
-    userLogin : {url : '/auth/login', method : 'POST'},
-    verifyOtp : {url : '/auth/verifyotp', method : 'POST'},
-    forgotPass : {url : '/auth/forgotPassword', method : 'POST'},
-    resetPassword : {url : '/auth/resetpassword', method : 'POST'}
+    userSignup: { url: '/auth/register', method: 'POST' },
+    userLogin: { url: '/auth/login', method: 'POST' },
+    verifyOtp: { url: '/auth/verifyotp', method: 'POST' },
+    forgotPass: { url: '/auth/forgotPassword', method: 'POST' },
+    resetPassword: { url: '/auth/resetpassword', method: 'POST' },
+    addProject: { url: '/project/add-project', method: 'POST' },
+    getProjects: { url: '/project/get-projects', method: 'GET' }
 }

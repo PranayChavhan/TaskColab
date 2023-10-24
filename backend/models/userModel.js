@@ -50,7 +50,7 @@ module.exports = {
     //SQL Query to Update otp
     updateOTP: (email, otp) => {
         return new Promise((resolve, reject) => {
-            db.query('UPDATE users SET otp= ? WHERE email = ?', [otp, email], (err, result) => {
+            db.query('UPDATE users SET otp= ?, is_verified=? WHERE email = ?', [otp, 1, email], (err, result) => {
                 if (err) {
                     reject(err);
                 }

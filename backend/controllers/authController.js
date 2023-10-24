@@ -35,6 +35,7 @@ class AuthController {
         try {
             //Find User by email to check if user already exists
             const user = await userModel.getUserByEmail(email);
+            console.log(user);
             if (user) {
                 return res.status(400).json({ msg: "User already exists" })
             }
@@ -82,10 +83,12 @@ class AuthController {
         const email = req.body.email;
 
         if (otp == null || email == null) {
+            console.log("Nulll Fields")
             return res.status(400).json({ msg: "Please fill in all fields" });
         }
 
         if (otp.length != 5) {
+
             return res.status(400).json({ msg: "Invalid OTP" });
         }
 
@@ -97,17 +100,22 @@ class AuthController {
                 return res.status(400).json({ msg: "User does not exist" });
             }
 
+            console.log("OTP")
+            console.log(req.body);
 
-            if (user.otp == otp) {
+            if (user.otp === parseInt(otp)) {
+
                 //Update OTP
-                await userModel.updateOTP(email, null);
+                const randomOTP = Math.floor(10000 + Math.random() * 90000);
+                await userModel.updateOTP(email, randomOTP);
                 return res.status(200).json({ msg: "OTP verified successfully!" });
             }
 
             return res.status(400).json({ msg: "Invalid OTP" });
 
         } catch (err) {
-            return res.statue(500).json({ msg: err.message });
+            console.log(err)
+            return res.status(500).json({ msg: err.message });
         }
     }
 
@@ -116,6 +124,8 @@ class AuthController {
         const { email, password } = req.body;
 
         if (!email || !password) {
+            console.log("Nulll Fields")
+
             return res.status(400).json({ msg: "Please fill in all fields" })
         }
 
@@ -123,6 +133,8 @@ class AuthController {
             //find user by email
             const user = await userModel.getUserByEmail(email);
             if (!user) {
+                console.log("no user")
+
                 return res.status(400).json({ msg: "User does not exist" })
             }
             //check if password is coorect 
@@ -130,13 +142,14 @@ class AuthController {
             const isMatch = await bcrypt.compare(password, user.password_hash);
 
             if (!isMatch) {
+                console.log("Invalid Creds")
                 return res.status(400).json({ msg: "Invalid credentials" })
             }
             //Gnenerate access token
 
             console.log("USER ID")
 
-            const token = jwt.sign({ userId: user.user_id,fname:user.firstname }, process.env.JWT_SECRET);
+            const token = jwt.sign({ userId: user.user_id, fname: user.firstname }, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 token,
@@ -201,12 +214,18 @@ class AuthController {
     async resetPassword(req, res) {
         const { email, otp, password } = req.body;
 
+
+        console.log("Request Data: ");
+        console.log(req.body);
+
         if (!otp || !password) {
             return res.status(400).json({ msg: "Please fill in all fields" })
         }
 
         try {
             const user = await userModel.getUserByEmail(email);
+            console.log("User:   ")
+            console.log(user)
 
             if (!user) {
                 return res.status(400).json({ msg: "User does not exist" })

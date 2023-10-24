@@ -43,10 +43,14 @@ const processResponse = (response) => {
         return { isSuccess: true, data: response.data }
     }
     else {
+        console.log("Reponse Data")
+        console.log(response)
+        console.log(response.data)
+
         return {
             isFailure: true,
             status: response?.status,
-            msg: response?.msg,
+            msg: response?.data,
             code: response?.code
         }
     }
@@ -56,16 +60,16 @@ const processResponse = (response) => {
 const processError = (error) => {
     if (error.response) {
         //when request is made is correct but received another response
-        console.log("ERROR IN RESPONSE: ", error.toJSON());
+        console.log("ERROR I RESPONSE: ", error.toJSON());
         return {
             isError: true,
-            msg: API_NOTIFICATION_MESSAGES.responseFailure,
+            msg: error.response.data.msg,
             code: error.response.status
         }
     }
     else if (error.request) {
         //when request is made and not get the response
-        console.log("ERROR IN RESPONSE: ", error.toJSON());
+        console.log("ERROR  RESPONSE: ", error.toJSON());
         return {
             isError: true,
             msg: API_NOTIFICATION_MESSAGES.requestFailure,
@@ -74,7 +78,7 @@ const processError = (error) => {
     }
     else {
         //when request cant be made
-        // console.log("ERROR IN RESPONSE: ", error.toJSON());
+        console.log("ERROR IN RESPONSE: ", error.toJSON());
         return {
             isError: true,
             msg: API_NOTIFICATION_MESSAGES.networkError,

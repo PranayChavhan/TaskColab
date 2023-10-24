@@ -4,33 +4,33 @@ const db = require("../config/db");
 
 module.exports = {
 
-  getProjectById:(projectId)=>{
-    return new Promise((resolve,reject)=>{
-      db.query('SELECT * FROm projects WHERE project_id = ?',[projectId],
-      (err,results)=>{
-        if(err){
-          reject(err);
-        }else{
-          resolve(results);
-        }
-      })
+  getProjectById: (projectId) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROm projects WHERE project_id = ?', [projectId],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
     })
   },
-  getProjectsByUser:(userId)=>{
-    return new Promise((resolve, reject)=>{
-      db.query('SELECT * FROM projects WHERE project_head=?',[userId],
-      (err,results)=>{
-        if(err){
-          reject(err);
-        }else{
-          resolve(results);
-        }
-      })
+  getProjectsByUser: (userId) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM projects WHERE project_head=?', [userId],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
     })
   },
   addProject: (projectData) => {
     return new Promise((resolve, reject) => {
-      const {name,description, userId} = projectData;
+      const { name, description, userId } = projectData;
       db.query('INSERT INTO projects (name, description, project_head) value (?,?,?);', [name, description, userId],
         (err, results) => {
           if (err) {
@@ -42,31 +42,31 @@ module.exports = {
     })
   },
 
-  updateProjectById:(projectData)=>{
-    const {projectId, name,description} = projectData;
-    return new Promise((resolve,reject)=>{
-      db.query('UPDATE projects SET name=?, description=? WHERE project_id=?',[projectId,name,description],
-        (err,results)=>{
-          if(err){
+  updateProjectById: (projectData) => {
+    const { projectId, name, description } = projectData;
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE projects SET name=?, description=? WHERE project_id=?', [projectId, name, description],
+        (err, results) => {
+          if (err) {
             reject(err);
-          }else{
+          } else {
             resolve(results);
           }
         })
     })
   },
 
-  
-  deleteProjectById:(projectId)=>{
-    return new Promise((resolve, reject)=>{
-      db.query('DELETE FROM  projects WHERE project_id=?',[projectId],
-      (err,results)=>{
-        if(err){
-          reject(err);
-        }else{
-          resolve(results);
-        }
-      })
+
+  deleteProjectById: (projectId) => {
+    return new Promise((resolve, reject) => {
+      db.query('DELETE FROM  projects WHERE project_id=?', [projectId],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
     })
   }
 }

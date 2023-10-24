@@ -27,8 +27,14 @@ import {
   setOpenConfigurator,
   setOpenSidenav,
 } from "@/context";
+import { useContext } from "react";
+import { DataContext, DataProvider } from "@/context/DataProvider";
 
-export function DashboardNavbar({handleNewProject}) {
+export function DashboardNavbar({ handleNewProject }) {
+
+  const { account, setAccount } = useContext(DataContext);
+
+
   const [controller, dispatch] = useMaterialTailwindController();
   const { fixedNavbar, openSidenav } = controller;
   const { pathname } = useLocation();
@@ -40,20 +46,18 @@ export function DashboardNavbar({handleNewProject}) {
   return (
     <Navbar
       color={fixedNavbar ? "white" : "transparent"}
-      className={`rounded-xl transition-all ${
-        fixedNavbar
-          ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
-          : "px-0 py-1"
-      }`}
+      className={`rounded-xl transition-all ${fixedNavbar
+        ? "sticky top-4 z-40 py-3 shadow-md shadow-blue-gray-500/5"
+        : "px-0 py-1"
+        }`}
       fullWidth
       blurred={fixedNavbar}
     >
       <div className="flex flex-col-reverse justify-between gap-6 md:flex-row md:items-center">
         <div className="capitalize">
           <Breadcrumbs
-            className={`bg-transparent p-0 transition-all ${
-              fixedNavbar ? "mt-1" : ""
-            }`}
+            className={`bg-transparent p-0 transition-all ${fixedNavbar ? "mt-1" : ""
+              }`}
           >
             <Link to={`/${layout}`}>
               <Typography
@@ -77,7 +81,7 @@ export function DashboardNavbar({handleNewProject}) {
           </Typography>
         </div>
         <div className="flex items-center">
-        <Button onClick={handleNewProject} color="blue" className="mr-4 flex items-center justify-center mb-0 text-white">New Project <PlusSmallIcon className="h-5 w-5"/></Button>
+          <Button onClick={handleNewProject} color="blue" className="mr-4 flex items-center justify-center mb-0 text-white">New Project <PlusSmallIcon className="h-5 w-5" /></Button>
 
           <div className="mr-auto md:mr-4 md:w-56">
             <Input label="Type here" />
@@ -90,23 +94,55 @@ export function DashboardNavbar({handleNewProject}) {
           >
             <Bars3Icon strokeWidth={3} className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
-          <Link to="/auth/sign-in">
-            <Button
-              variant="text"
-              color="blue-gray"
-              className="hidden items-center gap-1 px-4 xl:flex"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-              Sign In
-            </Button>
-            <IconButton
-              variant="text"
-              color="blue-gray"
-              className="grid xl:hidden"
-            >
-              <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
-            </IconButton>
-          </Link>
+
+
+
+          {
+            account ? <Link to="/dashboard/profile">
+              <Button
+                variant="text"
+                color="blue-gray"
+                className="hidden items-center gap-1 px-4 xl:flex"
+              >
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+                {account.firstname} <i class="fa-solid fa-chevron-down"></i>
+              </Button>
+              <IconButton
+                variant="text"
+                color="blue-gray"
+                className="grid xl:hidden"
+              >
+                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+              </IconButton>
+            </Link>
+              :
+              <Link to="/auth/sign-in">
+                <Button
+                  variant="text"
+                  color="blue-gray"
+                  className="hidden items-center gap-1 px-4 xl:flex"
+                >
+                  <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+                  Sign In
+                </Button>
+                <IconButton
+                  variant="text"
+                  color="blue-gray"
+                  className="grid xl:hidden"
+                >
+                  <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+                </IconButton>
+              </Link>
+
+
+
+
+
+
+          }
+
+
+
           <IconButton
             variant="text"
             color="blue-gray"
@@ -194,7 +230,7 @@ export function DashboardNavbar({handleNewProject}) {
           </Menu>
         </div>
       </div>
-    </Navbar>
+    </Navbar >
   );
 }
 
