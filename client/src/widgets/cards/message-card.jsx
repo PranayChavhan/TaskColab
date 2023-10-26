@@ -3,7 +3,7 @@ import { Avatar, Typography } from "@material-tailwind/react";
 
 export function MessageCard({ img, name, message, action }) {
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-center justify-between gap-4 w-full">
       <div className="flex items-center gap-4">
         <Avatar
           src={img}

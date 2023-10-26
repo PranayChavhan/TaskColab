@@ -66,7 +66,7 @@ export function Profile() {
                     Settings
                   </Tab>
                 </TabsHeader>
-              </Tabs>
+              </Tabs>Its a simple dialog.
             </div>
           </div>
           <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">

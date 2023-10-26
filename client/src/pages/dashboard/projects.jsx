@@ -25,12 +25,48 @@ import { useEffect, useState } from "react";
 import { API } from "@/services/api";
 
 export function Projects() {
+  const [loader, setLoader] = useState(false);
 
-  const [projects, setProjects] = useState([]);
-  // 
-  useEffect(async () => {
-    
-  }, [])
+  const [projects, setProjects] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Proceed To Signup
+        let response = await API.getProjects();
+
+        if (response.isSuccess) {
+          console.log("Successfully Created Project!");
+          console.log(response.data);
+
+          const recievedProjects = response.data.projects;
+          if (recievedProjects && Array.isArray(recievedProjects)) {
+            setProjects(recievedProjects);
+            console.log(response.data.projects);
+            setLoader(true);
+
+          }
+        } else {
+          console.log("Failed to sign in");
+        }
+      } catch (err) {
+        console.log("# ERROR: ", err)
+        console.error("Error:", err);
+        toast.error(err.msg);
+      }
+    };
+
+    fetchData(); // Call the async function immediately
+
+  }, []);
+
+  useEffect(() => {
+    console.log("Projects")
+    console.log(projects)
+  }, [loader])
+
+
+
+
 
   return (
     <>
@@ -38,65 +74,69 @@ export function Projects() {
         <div className="absolute inset-0 h-full w-full bg-orange-400/20" />
       </div>
       <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
-        <CardBody className="p-4">
-          <div className="mb-10 flex items-center justify-between gap-6">
-            <div className="flex items-center gap-6">
 
-              <div>
-                <Typography variant="h5" color="blue-gray" className="mb-1 mt-2">
-                  My Projects
-                </Typography>
+        {
+          projects ?
+            (projects.length > 0) &&
+            <CardBody className="p-4">
+              <div className="mb-10 flex items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+
+                  <div>
+                    <Typography variant="h5" color="blue-gray" className="mb-1 mt-2">
+                      My Projects
+                    </Typography>
+
+                  </div>
+                </div>
 
               </div>
-            </div>
 
-          </div>
-
-          <div className="px-4 pb-4">
-            <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
-              {projectsData.map(
-                ({ img, title, description, tag, route, members }) => (
-                  <Card key={title} color="transparent" shadow={false}>
-                    <CardHeader
-                      floated={false}
-                      color="gray"
-                      className="mx-0 mt-0 mb-4 h-64 xl:h-40"
-                    >
-                      <img
-                        src={img}
-                        alt={title}
-                        className="h-full w-full object-cover"
-                      />
-                    </CardHeader>
-                    <CardBody className="py-0 px-1">
-                      <Typography
-                        variant="small"
-                        className="font-normal text-blue-gray-500"
-                      >
-                        {tag}
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        color="blue-gray"
-                        className="mt-1 mb-2"
-                      >
-                        {title}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        className="font-normal text-blue-gray-500"
-                      >
-                        {description}
-                      </Typography>
-                    </CardBody>
-                    <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
-                      <Link to={route}>
-                        <Button variant="outlined" size="sm">
-                          view project
-                        </Button>
-                      </Link>
-                      <div>
-                        {members.map(({ img, name }, key) => (
+              <div className="px-4 pb-4">
+                <div className="mt-6 grid grid-cols-1 gap-12 md:grid-cols-2 xl:grid-cols-4">
+                  {loader && projects !== null ? projects.map(
+                    ({ project_id, image, name, description, tag, route, members }) => (
+                      <Card key={name} color="transparent" shadow={false}>
+                        <CardHeader
+                          floated={false}
+                          color="gray"
+                          className="mx-0 mt-0 mb-4 h-64 xl:h-40"
+                        >
+                          <img
+                            src={import.meta.env.VITE_API_BASE + `uploads/${image}`}
+                            alt={name}
+                            className="h-full w-full object-cover"
+                          />
+                        </CardHeader>
+                        <CardBody className="py-0 px-1">
+                          <Typography
+                            variant="small"
+                            className="font-normal text-blue-gray-500"
+                          >
+                            #ProjectId{project_id}
+                          </Typography>
+                          <Typography
+                            variant="h5"
+                            color="blue-gray"
+                            className="mt-1 mb-2"
+                          >
+                            {name}
+                          </Typography>
+                          <Typography
+                            variant="small"
+                            className="font-normal text-blue-gray-500"
+                          >
+                            {description}
+                          </Typography>
+                        </CardBody>
+                        <CardFooter className="mt-6 flex items-center justify-between py-0 px-1">
+                          <Link to={`/dashboard/projects/${project_id}`}>
+                            <Button variant="outlined" size="sm">
+                              view project
+                            </Button>
+                          </Link>
+                          <div>
+                            {/* {members.map(({ img, name }, key) => (
                           <Tooltip key={name} content={name}>
                             <Avatar
                               src={img}
@@ -107,15 +147,22 @@ export function Projects() {
                                 }`}
                             />
                           </Tooltip>
-                        ))}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                )
-              )}
-            </div>
-          </div>
-        </CardBody>
+                        ))} */}
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    )
+                  ) :
+                    <p>Hello</p>
+
+                  }
+                </div>
+              </div>
+            </CardBody>
+            :
+            <p>No Projects</p>
+        }
+
       </Card>
     </>
   );

@@ -19,6 +19,8 @@ axiosInstance.interceptors.request.use(
         } else if (config.TYPE.query) {
             config.url = config.url + '/' + config.TYPE.query;
         }
+
+        console.log(config.url)
         return config;
     },
     function (error) {
@@ -90,14 +92,17 @@ const processError = (error) => {
 const API = {};
 
 for (const [key, value] of Object.entries(SERVICE_URLS)) {
-    API[key] = (body, showUploadProgress, showDownloadProgress) =>
-        axiosInstance({
+    API[key] = (body, showUploadProgress, showDownloadProgress) => {
+        console.log(value.contentType)
+        console.log(body)
+        return axiosInstance({
             method: value.method,
             url: value.url,
             data: value.method === 'DELETE' ? {} : body,
             responseType: value.responseType,
             headers: {
-                authorization: getAccessToken()
+                authorization: getAccessToken(),
+                "Content-Type": value.contentType
             },
             TYPE: getType(value, body),
             onUploadProgress: function (progressEvent) {
@@ -113,6 +118,7 @@ for (const [key, value] of Object.entries(SERVICE_URLS)) {
                 }
             }
         })
+    }
 
 }
 

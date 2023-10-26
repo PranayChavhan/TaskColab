@@ -56,7 +56,8 @@ export function SignIn({ setIsAuthenticated }) {
           user_id: user.id,
           firstname: user.firstname,
           lastname: user.lastname,
-          username: user.username
+          username: user.username,
+          profile: user.profile_image_url
         })
 
         sessionStorage.setItem("accessToken", `Bearer ${response.data.token}`)
@@ -68,6 +69,7 @@ export function SignIn({ setIsAuthenticated }) {
         toast.error(response.msg)
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("Error:", err)
       toast.error(err.msg);
     }
@@ -101,13 +103,14 @@ export function SignIn({ setIsAuthenticated }) {
         console.log("Successfully sign in")
 
         toast.success("Account Created!")
-        //Verify OTP
+        //Vseconderify OTP
         setForm('verify-otp');
       }
       else {
         console.log("Failed to sign in");
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("Error:", err)
       toast.error(err.msg);
     }
@@ -144,6 +147,7 @@ export function SignIn({ setIsAuthenticated }) {
         toast.error("Verification Failed!")
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("Error:", err)
       toast.error(err.msg);
     }
@@ -174,6 +178,7 @@ export function SignIn({ setIsAuthenticated }) {
         console.log("Failed to sign in");
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("Error:", err)
       toast.error(err.msg);
     }
@@ -212,6 +217,7 @@ export function SignIn({ setIsAuthenticated }) {
         console.log("Failed to sign in");
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("Error:", err)
       toast.error(err.msg);
     }
@@ -242,7 +248,7 @@ export function SignIn({ setIsAuthenticated }) {
               <Avatar src="/img/logo-ct.png" size="md" />
               <Typography
                 variant="h5"
-                color="blue-gray"
+                color="bluprofile_e-gray"
               >
                 Task<span className="text-pink-900">Collab</span>
               </Typography>

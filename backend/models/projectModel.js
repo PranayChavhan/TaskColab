@@ -28,10 +28,22 @@ module.exports = {
         })
     })
   },
+  getProjectDetails: (projectId, headId) => {
+    return new Promise((resolve, reject) => {
+      db.query('select p.project_id,p.name,p.description,p.image , p.project_head, u.firstname,u.lastname,u.username,u.email,u.profile_image_url from projects as p inner join project_members as m on p.project_id=m.project_id inner join users as u on u.user_id=m.user_id where p.project_id=?', [projectId,],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
+    })
+  },
   addProject: (projectData) => {
     return new Promise((resolve, reject) => {
-      const { name, description, userId } = projectData;
-      db.query('INSERT INTO projects (name, description, project_head) value (?,?,?);', [name, description, userId],
+      const { name, description, image, userId } = projectData;
+      db.query('INSERT INTO projects (name, description, image, project_head) value (?,?,?,?);', [name, description, image, userId],
         (err, results) => {
           if (err) {
             reject(err);
@@ -55,8 +67,6 @@ module.exports = {
         })
     })
   },
-
-
   deleteProjectById: (projectId) => {
     return new Promise((resolve, reject) => {
       db.query('DELETE FROM  projects WHERE project_id=?', [projectId],

@@ -3,6 +3,7 @@ import { SignIn } from "./pages/auth";
 import { Route, Routes, Outlet, Navigate } from 'react-router-dom'
 import { useState } from 'react';
 import { DataProvider } from "./context/DataProvider";
+import ProjectDetails from "./pages/dashboard/projectDetails";
 function App() {
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,6 +27,7 @@ function App() {
         {/* Protected */}
         <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
           <Route path="/dashboard/*" element={<Dashboard />} />
+
           <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
         </Route>
       </Routes>

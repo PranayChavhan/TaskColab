@@ -14,6 +14,9 @@ app.use(express.json());
 
 dotenv.config({ path: './.env' });
 
+
+app.use('/uploads', express.static('uploads'))
+
 //Development
 // //check connection
 // db.connect((err) => {

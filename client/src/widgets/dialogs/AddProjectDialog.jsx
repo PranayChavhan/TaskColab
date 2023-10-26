@@ -20,11 +20,13 @@ export function AddProjectDialog({ open, setOpen, handleOpen }) {
 
   useEffect(() => {
     setImageURL('https://source.unsplash.com/random/900x300/?coding');
-
     console.log(imageURL)
-
   }, [open])
 
+  const [selectedFile, setSelectedFile] = useState(null);
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
 
   const [projectData, setProjectData] = useState({
     name: '',
@@ -38,7 +40,19 @@ export function AddProjectDialog({ open, setOpen, handleOpen }) {
 
     }
     try {
-      const response = await API.addProject(projectData);
+
+      const formData = new FormData();
+
+      formData.append('name', projectData.name);
+      formData.append('description', projectData.description);
+      formData.append('image', selectedFile)
+
+      console.log(selectedFile);
+      formData.forEach((value, key) => {
+        console.log(`${key}:${value}`);
+      })
+      console.log("Select:", selectedFile)
+      const response = await API.addProject(formData);
 
       if (response.isSuccess) {
         console.log("Successfully created project")
@@ -52,6 +66,7 @@ export function AddProjectDialog({ open, setOpen, handleOpen }) {
         console.log("Failed to sign in");
       }
     } catch (err) {
+      console.log("# ERROR: ", err)
       console.log("ERROR: ", err);
       toast.error(err.msg);
     }
@@ -86,7 +101,7 @@ export function AddProjectDialog({ open, setOpen, handleOpen }) {
         <DialogBody className="flex flex-col gap-8" >
           <Input size="lg" label="Project Name" value={projectData.name} onChange={(e) => setProjectData({ ...projectData, name: e.target.value })} />
           <Textarea label="Porject Description" value={projectData.description} onChange={(e) => setProjectData({ ...projectData, description: e.target.value })} />
-          <Input size="lg" type="file" label="Project Image" />
+          <Input size="lg" type="file" label="Project Image" onChange={handleFileChange} />
         </DialogBody>
         <DialogFooter>
           <Button

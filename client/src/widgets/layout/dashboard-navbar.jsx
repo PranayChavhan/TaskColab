@@ -104,7 +104,7 @@ export function DashboardNavbar({ handleNewProject }) {
                 color="blue-gray"
                 className="hidden items-center gap-1 px-4 xl:flex"
               >
-                <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />
+                {account ? <img className="w-6 h-6 rounded-full" src={account.profile} /> : <UserCircleIcon className="h-5 w-5 text-blue-gray-500" />}
                 {account.firstname} <i class="fa-solid fa-chevron-down"></i>
               </Button>
               <IconButton
