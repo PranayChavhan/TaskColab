@@ -1,239 +1,72 @@
 const db = require("../config/db");
 
-
-
 module.exports = {
-
-    getTaskById: (TaskId) => {
-        return new Promise((resolve, reject) => {
-            db.query('SELECT * FROm tasks WHERE user_id = ?', [TaskId],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    },
-    gettasksByUser: (userId) => {
-        return new Promise((resolve, reject) => {
-            db.query('SELECT * FROM tasks WHERE Task_head=?', [userId],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    },
-    getTaskDetails: (TaskId, headId) => {
-        return new Promise((resolve, reject) => {
-            db.query('select p.Task_id,p.name,p.description,p.image , p.Task_head, u.firstname,u.lastname,u.username,u.email,u.profile_image_url from tasks as p inner join Task_members as m on p.Task_id=m.Task_id inner join users as u on u.user_id=m.user_id where p.Task_id=?', [TaskId,],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    },
-    addTask: (TaskData) => {
-        return new Promise((resolve, reject) => {
-            const { name, description, image, userId } = TaskData;
-            db.query('INSERT INTO tasks (name, description, image, Task_head) value (?,?,?,?);', [name, description, image, userId],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    },
-
-    updateTaskById: (TaskData) => {
-        const { TaskId, name, description } = TaskData;
-        return new Promise((resolve, reject) => {
-            db.query('UPDATE tasks SET name=?, description=? WHERE Task_id=?', [TaskId, name, description],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    },
-    deleteTaskById: (TaskId) => {
-        return new Promise((resolve, reject) => {
-            db.query('DELETE FROM  tasks WHERE Task_id=?', [TaskId],
-                (err, results) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(results);
-                    }
-                })
-        })
-    }
-}
-
-
-
-
-// // // Create a new Task
-// // function createTask(TaskData, callback) {
-
-// // }
-
-// // // Update an existing Task by Task_id
-// // function updateTask(TaskId, updatedTaskData, callback) {
-// //   const { name, description, image, Task_head } = updatedTaskData;
-
-// //   const sql = `
-// //     UPDATE tasks 
-// //     SET 
-// //       name = ?,
-// //       description = ?,
-// //       image = ?,
-// //       Task_head = ?
-// //     WHERE Task_id = ?`;
-
-// //   const values = [name, description, image, Task_head, TaskId];
-
-// //   db.query(sql, values, callback);
-// // }
-
-// // // Retrieve a Task by ID
-// // function getTaskById(TaskId, callback) {
-// //   const sql = "SELECT * FROM tasks WHERE Task_id = ?";
-// //   db.query(sql, TaskId, (err, result) => {
-// //     if (err) {
-// //       callback(err, null);
-// //     } else {
-// //       callback(null, result[0]); // Assuming you want to return a single Task
-// //     }
-// //   });
-// // }
-
-// // // Delete a Task by ID
-// // function deleteTask(TaskId, callback) {
-// //   const sql = "DELETE FROM tasks WHERE Task_id = ?";
-// //   db.query(sql, TaskId, callback);
-// // }
-
-// // // Retrieve all tasks
-// // function getAlltasks(callback) {
-// //   const sql = "SELECT * FROM tasks";
-// //   db.query(sql, (err, results) => {
-// //     if (err) {
-// //       callback(err, null);
-// //     } else {
-// //       callback(null, results);
-// //     }
-// //   });
-// // }
-
-
-// // // Assign Roles
-// // function linkUserToRole(userId, roleName, TaskId, callback) {
-// //   const sql = `
-// //     INSERT INTO user_roles (user_id, role_id, Task_id)
-// //     SELECT ?, roles.role_id, ?
-// //     FROM roles
-// //     WHERE role_name = ?;
-// //   `;
-
-// //   const values = [userId, roleName, TaskId ];
-
-// //   db.query(sql, values, callback);
-// // }
-
-// // module.exports = {
-// //   createTask,
-// //   updateTask,
-// //   getTaskById,
-// //   deleteTask,
-// //   getAlltasks,
-// //   link
-// // Create a new Task
-// function createTask(TaskData, callback) {
-
-// }
-
-// // Update an existing Task by Task_id
-// function updateTask(TaskId, updatedTaskData, callback) {
-//   const { name, description, image, Task_head } = updatedTaskData;
-
-//   const sql = `
-//     UPDATE tasks 
-//     SET 
-//       name = ?,
-//       description = ?,
-//       image = ?,
-//       Task_head = ?
-//     WHERE Task_id = ?`;
-
-//   const values = [name, description, image, Task_head, TaskId];
-
-//   db.query(sql, values, callback);
-// }
-
-// // Retrieve a Task by ID
-// function getTaskById(TaskId, callback) {
-//   const sql = "SELECT * FROM tasks WHERE Task_id = ?";
-//   db.query(sql, TaskId, (err, result) => {
-//     if (err) {
-//       callback(err, null);
-//     } else {
-//       callback(null, result[0]); // Assuming you want to return a single Task
-//     }
-//   });
-// }
-
-// // Delete a Task by ID
-// function deleteTask(TaskId, callback) {
-//   const sql = "DELETE FROM tasks WHERE Task_id = ?";
-//   db.query(sql, TaskId, callback);
-// }
-
-// // Retrieve all tasks
-// function getAlltasks(callback) {
-//   const sql = "SELECT * FROM tasks";
-//   db.query(sql, (err, results) => {
-//     if (err) {
-//       callback(err, null);
-//     } else {
-//       callback(null, results);
-//     }
-//   });
-// }
-
-
-// // Assign Roles
-// function linkUserToRole(userId, roleName, TaskId, callback) {
-//   const sql = `
-//     INSERT INTO user_roles (user_id, role_id, Task_id)
-//     SELECT ?, roles.role_id, ?
-//     FROM roles
-//     WHERE role_name = ?;
-//   `;
-
-//   const values = [userId, roleName, TaskId ];
-
-//   db.query(sql, values, callback);
-// }
-
-// module.exports = {
-//   createTask,
-//   updateTask,
-//   getTaskById,
-//   deleteTask,
-//   getAlltasks,
-//   linkUserToRole
-// };
-// UserToRole
-// // };
+  getTaskById: (taskId) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM tasks WHERE task_id = ?', [taskId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  getTasksByUser: (userId) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT * FROM tasks WHERE assigne_to = ?', [userId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  getTaskDetails: (taskId, assigneTo) => {
+    return new Promise((resolve, reject) => {
+      db.query('SELECT t.task_id, t.name, t.description, t.status, t.due_date, t.priority, t.project_id, t.assigne_to, t.created_by, u.firstname, u.lastname, u.username, u.email, u.profile_image_url FROM tasks AS t INNER JOIN users AS u ON t.assigne_to = u.user_id WHERE t.task_id = ?', [taskId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  addTask: (taskData) => {
+    return new Promise((resolve, reject) => {
+      const { name, description, status, due_date, priority, project_id, assigne_to, created_by } = taskData;
+      db.query('INSERT INTO tasks (name, description, status, due_date, priority, project_id, assigne_to, created_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?);', [name, description, status, due_date, priority, project_id, assigne_to, created_by], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  updateTaskById: (taskData) => {
+    const { taskId, name, description, status, due_date, priority, project_id, assigne_to } = taskData;
+    return new Promise((resolve, reject) => {
+      db.query('UPDATE tasks SET name = ?, description = ?, status = ?, due_date = ?, priority = ?, project_id = ?, assigne_to = ? WHERE task_id = ?', [name, description, status, due_date, priority, project_id, assigne_to, taskId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  },
+  deleteTaskById: (taskId) => {
+    return new Promise((resolve, reject) => {
+      db.query('DELETE FROM tasks WHERE task_id = ?', [taskId], (err, results) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+    });
+  }
+};
