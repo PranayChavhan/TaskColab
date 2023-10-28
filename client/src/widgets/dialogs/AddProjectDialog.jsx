@@ -15,11 +15,10 @@ import { API } from "@/services/api";
 
 export function AddProjectDialog({ open, setOpen, handleOpen }) {
 
-  const [imageURL, setImageURL] = useState('');
+  const [imageURL, setImageURL] = useState('https://source.unsplash.com/random/900x200/?coding');
 
 
   useEffect(() => {
-    setImageURL('https://source.unsplash.com/random/900x300/?coding');
     console.log(imageURL)
   }, [open])
 
@@ -90,7 +89,7 @@ export function AddProjectDialog({ open, setOpen, handleOpen }) {
 
             className="h-56 w-full rounded-lg object-cover object-center"
             src={imageURL}
-            alt="nature image"
+            alt="project image"
             loading="lazy"
           />
 

@@ -21,17 +21,17 @@ export function ProfileInfoCard({ title, description, details, action }) {
         {action}
       </CardHeader>
       <CardBody className="p-0">
-        {description && (
+        {/* {description && (
           <Typography
             variant="small"
             className="font-normal text-blue-gray-500"
           >
             {description}
           </Typography>
-        )}
-        {description && details ? (
+        )} */}
+        {/* {description && details ? (
           <hr className="my-8 border-blue-gray-50" />
-        ) : null}
+        ) : null} */}
         {details && (
           <ul className="flex flex-col gap-4 p-0">
             {Object.keys(details).map((el, key) => (

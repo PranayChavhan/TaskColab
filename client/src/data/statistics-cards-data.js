@@ -1,6 +1,6 @@
 import {
-  BanknotesIcon,
-  UserPlusIcon,
+  FolderIcon,
+  BriefcaseIcon,
   UserIcon,
   ChartBarIcon,
 } from "@heroicons/react/24/solid";
@@ -8,31 +8,31 @@ import {
 export const statisticsCardsData = [
   {
     color: "blue",
-    icon: BanknotesIcon,
-    title: "Today's Money",
-    value: "$53k",
+    icon: FolderIcon,
+    title: "Total Projects",
+    value: "8",
     footer: {
       color: "text-green-500",
-      value: "+55%",
+      value: "",
       label: "than last week",
     },
   },
   {
-    color: "pink",
-    icon: UserIcon,
-    title: "Today's Users",
-    value: "2,300",
+    color: "orange",
+    icon: ChartBarIcon,
+    title: "Total Tasks",
+    value: "24",
     footer: {
       color: "text-green-500",
-      value: "+3%",
-      label: "than last month",
+      value: "+5%",
+      label: "than yesterday",
     },
   },
   {
     color: "green",
-    icon: UserPlusIcon,
-    title: "New Clients",
-    value: "3,462",
+    icon: BriefcaseIcon,
+    title: "My Projects",
+    value: "25",
     footer: {
       color: "text-red-500",
       value: "-2%",
@@ -40,16 +40,16 @@ export const statisticsCardsData = [
     },
   },
   {
-    color: "orange",
-    icon: ChartBarIcon,
-    title: "Sales",
-    value: "$103,430",
+    color: "pink",
+    icon: UserIcon,
+    title: "Total Users",
+    value: "28",
     footer: {
       color: "text-green-500",
-      value: "+5%",
-      label: "than yesterday",
+      value: "+3%",
+      label: "than last month",
     },
-  },
+  }
 ];
 
 export default statisticsCardsData;

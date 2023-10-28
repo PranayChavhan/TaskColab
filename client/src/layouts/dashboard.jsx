@@ -20,7 +20,6 @@ export function Dashboard() {
 
   const [open, setOpen] = useState(false);
 
-
   const handleNewProjectDialog = () => {
     setOpen(!open);
   }

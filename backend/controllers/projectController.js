@@ -88,10 +88,7 @@ class ProjectController {
         }
 
         console.log("Projects Data", projectData)
-        const results = await projectModel.addProject(projectData);
-        console.log(results)
-        console.log(results.insertId);
-        const response = await projectMemberModel.addMember(results.insertId, userId);
+        await projectModel.addProject(projectData);
 
 
         return res.status(200).json({ msg: "Project Created Successfull!" });
@@ -103,7 +100,7 @@ class ProjectController {
         const results = await projectModel.addProject(projectData);
         console.log(results)
         console.log(results.insertId);
-        const response = await projectMemberModel.addMember(results.insertId, userId);
+        const response = await projectMemberModel.addMember(projectId, userId);
 
         return res.status(200).json({ msg: "Project Created Successfull!" });
       }
