@@ -33,6 +33,7 @@ export const SERVICE_URLS = {
     addProject: { url: '/project/add-project', method: 'POST', contentType: 'multipart/form-data' },
     getProjects: { url: '/project/get-projects', method: 'GET', contentType: 'application/json' },
     getProjectDetails: { url: '/project/get-project/:id', method: 'GET', contentType: 'application/json', params: true },
-    addMember: { url: '/project/add-member', method: 'POST', contentType: 'application/json' }
+    addMember: { url: '/project/add-member', method: 'POST', contentType: 'application/json' },
+    addTask: { url: '/task/create-task', method: 'POST', contentType: 'application/json' },
 
 }

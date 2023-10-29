@@ -42,7 +42,7 @@ class TaskController {
         due_date: queryResult[0].due_date,
         priority: queryResult[0].priority,
         project_id: queryResult[0].project_id,
-        assigne_to: queryResult[0].assigne_to,
+        fk_user: queryResult[0].fk_user,
         created_by: queryResult[0].created_by,
       };
 
@@ -56,17 +56,18 @@ class TaskController {
 
   // [POST] Create Task
   async createTask(req, res) {
-    const { name, description, status, due_date, priority, project_id, assigne_to } = req.body;
+    const { name, description, status, due_date, priority, project_id, fk_user } = req.body;
     const userId = req.user.userId;
+    console.log(req.body)
 
-    if (!name || !description || !status || !due_date || !priority || !project_id || !assigne_to || !userId) {
+    if (!name || !description || !status || !due_date || !priority || !project_id || !userId) {
       return res.status(400).json({ "msg": "Please provide all the fields!" });
     }
 
     try {
       // Create new Task
       const taskData = {
-        name, description, status, due_date, priority, project_id, assigne_to, created_by: userId
+        name, description, status, due_date, priority, project_id, fk_user, created_by: userId
       };
 
       const results = await taskModel.addTask(taskData);
@@ -83,16 +84,16 @@ class TaskController {
 
   //[PUT] Update Task
   async updateTask(req, res) {
-    const { task_id, name, description, status, due_date, priority, project_id, assigne_to } = req.body;
+    const { task_id, name, description, status, due_date, priority, project_id, fk_user } = req.body;
 
-    if (task_id || !name || !description || !status || !due_date || !priority || !project_id || !assigne_to) {
+    if (task_id || !name || !description || !status || !due_date || !priority || !project_id || !fk_user) {
       return res.status(400).json({ "msg": "Required fields cannot be empty!" });
     }
 
     // Update the task
     try {
       const taskData = {
-        task_id, name, description, status, due_date, priority, project_id, assigne_to
+        task_id, name, description, status, due_date, priority, project_id, fk_user
       };
       await taskModel.updateTaskById(taskData);
       return res.status(201).json({ "msg": "Task Data Updated!" });

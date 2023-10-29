@@ -12,6 +12,6 @@ router.use("/auth", authRouter);
 router.use("/project", projectRoutes);
 
 // Tasks Routes
-router.use("/tasks", taskRoutes);
+router.use("/task", taskRoutes);
 
 module.exports = router;

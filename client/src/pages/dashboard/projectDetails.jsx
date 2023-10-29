@@ -30,11 +30,24 @@ import { Link, useParams } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { useEffect, useState } from "react";
 import { API } from "@/services/api";
+import { AddTaskDialog } from "@/widgets/dialogs/AddTaskDialog";
+import { useContext } from "react";
+import { DataContext } from "@/context/DataProvider";
 
 export function ProjectDetails() {
+
+
+    const { account } = useContext(DataContext);
     const [openUserDialog, setOpenUserDialog] = useState(false);
+    const [openTaskDialog, setOpenTaskDialog] = useState(false);
     const handleUserDialog = () => {
         setOpenUserDialog(!openUserDialog)
+    }
+
+    const handleTaskDialog = () => {
+        console.log("Helloo")
+        console.log(openTaskDialog);
+        setOpenTaskDialog(!openTaskDialog)
     }
 
     const { projectId } = useParams();
@@ -127,6 +140,9 @@ export function ProjectDetails() {
 
     return (
         <>
+            {/* {
+                project ? <Spinner className="h-12 w-12" /> :
+                    <> */}
             <Toaster
                 position="top-center"
                 reverseOrder={false}
@@ -136,8 +152,8 @@ export function ProjectDetails() {
             </div >
             <Card className="mx-3 -mt-16 mb-6 lg:mx-4">
                 <CardBody className="p-4 py-8">
-                    <div className="flex flex-col md:flex-row">
-                        <div className="w-full md:w-2/3 px-4">
+                    <div className="flex flex-col px-4 gap-12 md:flex-row">
+                        <div className="w-full md:w-2/3">
                             <Typography variant="h5" color="blue-gray" className="mb-3">
                                 {project ? project.name : "Project"}
                             </Typography>
@@ -145,21 +161,34 @@ export function ProjectDetails() {
                                 {project ? project.description : "Project"}
                             </Typography>
                             <div className="flex  mt-10 flex-col">
-                                <Typography variant="h6" color="blue-gray" className="mb-2">
-                                    Tasks
-                                </Typography>
-                                <table className="w-full min-w-[640px] table-auto">
+                                <div className="flex flex-shrink items-center justify-between">
+                                    <div className="members-text">
+                                        <Typography variant="h6" color="blue-gray" className="mb-2">
+                                            Tasks
+                                        </Typography>
+                                        <Typography
+                                            variant="small"
+                                            className="font-normal mb-2 text-blue-gray-500"
+                                        >
+                                            Architects design houses
+                                        </Typography>
+                                    </div>
+                                    <Button onClick={handleTaskDialog} variant="outlined" size="sm">
+                                        <i className="fa fa-plus" /> Add Task
+                                    </Button>
+                                </div>
+                                <table className="w-full mt-4 min-w-[640px] table-auto">
                                     <thead>
                                         <tr>
                                             {["Id", "Name", "Status", "Assigne"].map(
                                                 (el) => (
                                                     <th
                                                         key={el}
-                                                        className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                                                        className="border-b  border-blue-gray-50 py-3 px-5 text-left"
                                                     >
                                                         <Typography
                                                             variant="small"
-                                                            className="text-[11px] font-bold uppercase text-blue-gray-400"
+                                                            className="text-sm font-bold uppercase text-blue-gray-400"
                                                         >
                                                             {el}
                                                         </Typography>
@@ -170,19 +199,44 @@ export function ProjectDetails() {
 
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td className="py-3 px-5">1</td>
-                                            <td className="py-3 px-5">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-bold"
-                                                >
-                                                    This is a Task
-                                                </Typography>
-                                            </td>
-                                            <td className="py-3 px-5"><Chip value="Not Completed" color="green" size="sm" variant="ghost" /></td>
-                                        </tr>
+                                        {
+                                            project ? project.tasks.map(
+                                                (t, i) => (
+                                                    <tr>
+                                                        <td className="py-3 px-5">{i + 1}</td>
+                                                        <td className="py-3 px-5">
+                                                            <Typography
+                                                                variant="small"
+                                                                color="blue-gray"
+                                                                className="font-bold"
+                                                            >
+                                                                {t.name}
+                                                            </Typography>
+                                                        </td>
+                                                        <td className="py-3 px-5">
+                                                            <Chip value={t.status} color="green" size="sm" variant="ghost" />
+                                                        </td>
+                                                        <td>
+                                                            {t.fk_user ?
+                                                                <div className="flex items-center gap-4">
+                                                                    <Avatar src={task.profile_image_url} alt="avatar" />
+                                                                    <div>
+                                                                        <Typography variant="h6">Tania Andrew</Typography>
+                                                                        <Typography variant="small" color="gray" className="font-normal">
+                                                                            Web Developer
+                                                                        </Typography>
+                                                                    </div>
+                                                                </div>
+                                                                :
+                                                                <Button variant="text" size="sm">
+                                                                    view
+                                                                </Button>
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            ) : ''
+                                        }
                                     </tbody>
                                 </table>
                             </div>
@@ -234,18 +288,21 @@ export function ProjectDetails() {
                 <Toaster
                     position="top-center"
                     reverseOrder={false}
-                />s
+                />
                 <DialogHeader className="justify-between">
                     <Typography variant="h5" color="blue-gray">
                         Add User on Project
                     </Typography>
 
                     <IconButton
-                        color="black"
+                        color="red"
                         size="sm"
                         variant="text"
+                        icon
                         onClick={handleUserDialog}
-                    />
+                    >
+                        <i className="fa fa-close text-xl" />
+                    </IconButton>
                 </DialogHeader>
                 <DialogBody className="w-full">
                     <ul className="flex flex-col gap-6 px-3 w-full">
@@ -264,10 +321,14 @@ export function ProjectDetails() {
                         ))}
                     </ul>
                 </DialogBody>
-
-
             </Dialog>
+
+
+            {/* Add TASK  MODAL */}
+            <AddTaskDialog open={openTaskDialog} handleOpen={handleTaskDialog} projectId={projectId} />
         </>
+        //     }
+        // </>
     );
 }
 

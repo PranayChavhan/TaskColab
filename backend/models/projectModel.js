@@ -30,7 +30,31 @@ module.exports = {
   },
   getProjectDetails: (projectId, headId) => {
     return new Promise((resolve, reject) => {
-      db.query('select p.project_id,p.name,p.description,p.image , p.project_head, u.firstname,u.lastname,u.username,u.email,u.profile_image_url from projects as p inner join project_members as m on p.project_id=m.project_id inner join users as u on u.user_id=m.user_id where p.project_id=?', [projectId,],
+      db.query('select * from projects where project_id=?', [projectId],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
+    })
+  },
+  getProjectMembers: (projectId) => {
+    return new Promise((resolve, reject) => {
+      db.query('select u.user_id, u.firstname, u.lastname, u.email,u.profile_image_url from users u where u.user_id in ( select user_id from project_members where project_id=?)', [projectId],
+        (err, results) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(results);
+          }
+        })
+    })
+  },
+  getProjectTasks: (projectId) => {
+    return new Promise((resolve, reject) => {
+      db.query('select t.*, u.firstname, u.email, u.profile_image_url from tasks t left join users u on u.user_id = t.fk_user where t.project_id=?', [projectId],
         (err, results) => {
           if (err) {
             reject(err);

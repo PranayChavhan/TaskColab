@@ -1,5 +1,6 @@
 const projectMemberModel = require("../models/projectMemberModel");
 const projectModel = require("../models/projectModel");
+const { head } = require("../routes");
 
 
 class ProjectController {
@@ -34,6 +35,10 @@ class ProjectController {
 
       const queryResult = await projectModel.getProjectDetails(projectId, headId);
 
+      const projectMembers = await projectModel.getProjectMembers(projectId);
+
+      const projectTasks = await projectModel.getProjectTasks(projectId);
+
       console.log("Project Query")
       console.log(queryResult)
 
@@ -43,13 +48,8 @@ class ProjectController {
         description: queryResult[0].description,
         image: queryResult[0].image,
         project_head: queryResult[0].project_head,
-        members: queryResult.map((record) => ({
-          firstname: record.firstname,
-          lastname: record.lastname,
-          username: record.username,
-          email: record.email,
-          profile_image_url: record.profile_image_url,
-        })),
+        members: projectMembers,
+        tasks: projectTasks
       };
 
 
