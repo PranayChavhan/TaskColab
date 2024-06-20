@@ -9,19 +9,20 @@ class AuthController {
 
     // [GET]  /auth/users
     async getUsers(req, res) {
-        const users = await userModel.getUsers().then((users) => {
-            // console.log("Users: ", users);
-            return res.status(400).json({ users })
-        }).catch((err) => {
-            console.log("Error: ", err);
-            return res.status(500).json({ msg: err.message })
-        });
-        return res.status(200).json({ users });
+        try {
+            const users = await userModel.getUsers();
+
+            return res.status(200).json({ msg: "Users Fetched!", users: users })
+        }
+        catch (err) {
+            console.log("# ERROR", err)
+            return res.status(500).json({ msg: "Something went wrong!" })
+        }
     }
 
     // [POST] /auth/register
     async register(req, res) {
-        const { firstname, lastname, username, email, password, profile_image_url } = req.body;
+        const { firstname, lastname, username, email, password } = req.body;
         console.log("req.body", req.body);
 
         if (!firstname || !lastname || !username || !email || !password) {
@@ -35,6 +36,7 @@ class AuthController {
         try {
             //Find User by email to check if user already exists
             const user = await userModel.getUserByEmail(email);
+            console.log(user);
             if (user) {
                 return res.status(400).json({ msg: "User already exists" })
             }
@@ -44,6 +46,10 @@ class AuthController {
 
             //hash password
             const password_hash = await bcrypt.hash(password, 10);
+
+
+            //create a custom user avatar
+            const profile_image_url = `https://ui-avatars.com/api/?name=${firstname}+${lastname}&background=random`;
 
             //Create new user
             const newUser = {
@@ -70,10 +76,9 @@ class AuthController {
                 <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`
             await sendMail(to, subject, html);
 
-
             return res.status(200).json({ msg: 'User created successfully' });
-
         } catch (err) {
+            console.log("# ERROR: ", err)
             return res.status(500).json({ msg: err.message })
         }
     }
@@ -84,10 +89,12 @@ class AuthController {
         const email = req.body.email;
 
         if (otp == null || email == null) {
+            console.log("Nulll Fields")
             return res.status(400).json({ msg: "Please fill in all fields" });
         }
 
         if (otp.length != 5) {
+
             return res.status(400).json({ msg: "Invalid OTP" });
         }
 
@@ -99,17 +106,23 @@ class AuthController {
                 return res.status(400).json({ msg: "User does not exist" });
             }
 
+            console.log("OTP")
+            console.log(req.body);
 
-            if (user.otp == otp) {
+            if (user.otp === parseInt(otp)) {
+
                 //Update OTP
-                await userModel.updateOTP(email, null);
+                const randomOTP = Math.floor(10000 + Math.random() * 90000);
+                await userModel.updateOTP(email, randomOTP);
                 return res.status(200).json({ msg: "OTP verified successfully!" });
             }
 
             return res.status(400).json({ msg: "Invalid OTP" });
 
         } catch (err) {
-            return res.statue(500).json({ msg: err.message });
+            console.log("# ERROR: ", err)
+            console.log(err)
+            return res.status(500).json({ msg: err.message });
         }
     }
 
@@ -117,7 +130,11 @@ class AuthController {
     async login(req, res) {
         const { email, password } = req.body;
 
+        console.log(req.body)
+
         if (!email || !password) {
+            console.log("Nulll Fields")
+
             return res.status(400).json({ msg: "Please fill in all fields" })
         }
 
@@ -125,6 +142,8 @@ class AuthController {
             //find user by email
             const user = await userModel.getUserByEmail(email);
             if (!user) {
+                console.log("no user")
+
                 return res.status(400).json({ msg: "User does not exist" })
             }
             //check if password is coorect 
@@ -132,17 +151,20 @@ class AuthController {
             const isMatch = await bcrypt.compare(password, user.password_hash);
 
             if (!isMatch) {
+                console.log("Invalid Creds")
                 return res.status(400).json({ msg: "Invalid credentials" })
             }
             //Gnenerate access token
 
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+            console.log("USER ID")
+
+            const token = jwt.sign({ userId: user.user_id, fname: user.firstname }, process.env.JWT_SECRET);
 
             return res.status(200).json({
                 token,
                 msg: "Logged in successfully",
                 user: {
-                    id: user.id,
+                    id: user.user_id,
                     firstname: user.firstname,
                     lastname: user.lastname,
                     username: user.username,
@@ -153,6 +175,7 @@ class AuthController {
             });
 
         } catch (err) {
+            console.log("# ERROR: ", err)
             return res.status(500).json({ msg: err.message })
         }
     }
@@ -193,6 +216,7 @@ class AuthController {
             return res.status(200).json({ msg: 'OTP sent successfully' });
 
         } catch (err) {
+            console.log("# ERROR: ", err)
             return res.status(500).json({ msg: err.message })
         }
     }
@@ -201,12 +225,18 @@ class AuthController {
     async resetPassword(req, res) {
         const { email, otp, password } = req.body;
 
+
+        console.log("Request Data: ");
+        console.log(req.body);
+
         if (!otp || !password) {
             return res.status(400).json({ msg: "Please fill in all fields" })
         }
 
         try {
             const user = await userModel.getUserByEmail(email);
+            console.log("User:   ")
+            console.log(user)
 
             if (!user) {
                 return res.status(400).json({ msg: "User does not exist" })
@@ -214,7 +244,7 @@ class AuthController {
 
             console.log(user.otp);
             console.log(otp);
-            if (user.otp !== otp) {
+            if (user.otp != otp) {
                 return res.status(400).json({ msg: "Invalid OTP" })
             }
 
@@ -226,6 +256,7 @@ class AuthController {
 
             res.status(200).json({ msg: "Password updated successfully" });
         } catch (err) {
+            console.log("# ERROR: ", err)
             return res.status(500).json({ msg: err.message });
         }
 

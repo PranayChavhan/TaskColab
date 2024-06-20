@@ -24,6 +24,16 @@ export const API_NOTIFICATION_MESSAGES = {
 
 
 export const SERVICE_URLS = {
-    userSignup : {url : '/signup', method : 'POST'},
-    loginUser : {url : '/login', method : 'POST'}
+    getUsers: { url: '/auth/users', method: 'GET', contentType: 'application/json' },
+    userSignup: { url: '/auth/register', method: 'POST', contentType: 'application/json' },
+    userLogin: { url: '/auth/login', method: 'POST', contentType: 'application/json' },
+    verifyOtp: { url: '/auth/verifyotp', method: 'POST', contentType: 'application/json' },
+    forgotPass: { url: '/auth/forgotPassword', method: 'POST', contentType: 'application/json' },
+    resetPassword: { url: '/auth/resetpassword', method: 'POST' },
+    addProject: { url: '/project/add-project', method: 'POST', contentType: 'multipart/form-data' },
+    getProjects: { url: '/project/get-projects', method: 'GET', contentType: 'application/json' },
+    getProjectDetails: { url: '/project/get-project/:id', method: 'GET', contentType: 'application/json', params: true },
+    addMember: { url: '/project/add-member', method: 'POST', contentType: 'application/json' },
+    addTask: { url: '/task/create-task', method: 'POST', contentType: 'application/json' },
+
 }

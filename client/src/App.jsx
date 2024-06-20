@@ -1,20 +1,38 @@
-import AboutPage from './pages/AboutPage';
-import Homepage from './pages/Homepage';
-import { BrowserRouter, Route, Routes} from 'react-router-dom'
-import Login from './pages/Login';
-import "./App.css"
+import { Dashboard, Auth } from "@/layouts";
+import { SignIn } from "./pages/auth";
+import { Route, Routes, Outlet, Navigate } from 'react-router-dom'
+import { useState } from 'react';
+import { DataProvider } from "./context/DataProvider";
+import ProjectDetails from "./pages/dashboard/projectDetails";
+function App() {
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const PrivateRoute = ({ isAuthenticated }) => {
+    if (isAuthenticated) {
+      return (
+        <Outlet />
+      )
+    }
+    else {
+      return <Navigate replace to='/auth/sign-in' />
+    }
+  }
 
-const App = () => {
   return (
-    <BrowserRouter>
+
+    <DataProvider>
       <Routes>
-        <Route path='/' element = {<Homepage/>} />
-        <Route path='/login' element = {<Login/>} />
-        <Route path='/about' element = {<AboutPage/>} />
+        <Route path="/auth/sign-in" element={<SignIn setIsAuthenticated={setIsAuthenticated} />} />
+
+        {/* Protected */}
+        <Route path='/' element={<PrivateRoute isAuthenticated={isAuthenticated} />}>
+          <Route path="/dashboard/*" element={<Dashboard />} />
+
+          <Route path="*" element={<Navigate to="/dashboard/home" replace />} />
+        </Route>
       </Routes>
-    </BrowserRouter>
-  )
+    </DataProvider>
+  );
 }
 
-export default App
+export default App;
