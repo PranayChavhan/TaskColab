@@ -6,7 +6,7 @@ module.exports = {
     //SQL Query to get all users
     getUsers: () => {
         return new Promise((resolve, reject) => {
-            db.query('SELECT * FROM users', (err, results) => {
+            db.query('SELECT u.user_id, u.firstname, u.lastname, u.email,u.profile_image_url, u.username FROM users as u', (err, results) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -50,7 +50,7 @@ module.exports = {
     //SQL Query to Update otp
     updateOTP: (email, otp) => {
         return new Promise((resolve, reject) => {
-            db.query('UPDATE users SET otp= ? WHERE email = ?', [otp, email], (err, result) => {
+            db.query('UPDATE users SET otp= ?, is_verified=? WHERE email = ?', [otp, 1, email], (err, result) => {
                 if (err) {
                     reject(err);
                 }
