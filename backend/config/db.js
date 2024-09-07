@@ -1,15 +1,17 @@
 //Create Connection FOR MYSQL
 const mysql = require('mysql');
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
-});
+// Devwelopment
+// const db = mysql.createConnection({
+//     host: 'localhost',
+//     user: 'root',
+//     password: '',
+//     database: 'taskcollab',
+//     port: 3308,
+// });
 
+// Production
 
-
-
+const db = mysql.createPool("mysql://admin:AyUsDUrveshPraN@database-1.cqmmqqerazz0.ap-south-1.rds.amazonaws.com/taskcollab");
 
 module.exports = db;

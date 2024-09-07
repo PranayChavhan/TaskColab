@@ -6,6 +6,9 @@ const router = express.Router();
 //Register Route
 router.post('/register', authController.register);
 
+//Verify OTP Route
+router.post('/verifyotp', authController.verifyOTP);
+
 //Login Route
 router.post('/login', authController.login);
 
